@@ -36,6 +36,10 @@ from QRin import *
 
 # import webbrowser - open web
 
+# Note: The below constants are required for email functionality.
+# Sender is a valid email account, EMAILPASS is a valid password, or google external app code.
+SENDER = '' 
+EMAILPASS = ''
 
 def scan_in():
     vid_cap = cv2.VideoCapture(0)
@@ -137,8 +141,8 @@ def email():
             item.append('')
     df = pd.DataFrame.from_dict(record)
     df.to_csv(r'attendance.csv', index = False, header=True)
-    email_sender = 'qrinbotv1.0@gmail.com'
-    email_password = 'ghcctbyrmrvayqgq'
+    email_sender = SENDER
+    email_password = EMAILPASS
     verify = True
     while verify:
         email_receiver = input("Enter an email to send attendance: \n")
