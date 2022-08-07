@@ -1,5 +1,9 @@
 # QRin V1.0
-QRin V1.0 attendance based system. Designed for club use.
+QRin V1.0 attendance based system. A streamlined, intuitive system for digital club attendance and attendance management. 
+Utilizes qrcode creation and decoding as well as local file databases to store daily attendance records. Email functionality
+designed and executed using simple mail transfer protocol and EMAIL.MIME framework for file attachment.
+Designed for club use at Western School of Technology and Environmental Science. 
+> *Copywrite 2022 Luc Cohen*
 
 ## INSTALLATION:
  - Initialize a **local** powershell shell
