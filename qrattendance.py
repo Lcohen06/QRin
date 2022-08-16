@@ -27,19 +27,11 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
-# IMG
-from PIL import Image
-
-# GUI
-from QRin import *
-
+# CSV tables
+import matplotlib.pyplot as plt
 
 # import webbrowser - open web
 
-# Note: The below constants are required for email functionality.
-# Sender is a valid email account, EMAILPASS is a valid password, or google external app code.
-SENDER = '' 
-EMAILPASS = ''
 
 def scan_in():
     vid_cap = cv2.VideoCapture(0)
@@ -68,10 +60,6 @@ def add_name(name):
             folder = r"C:/Users/lucco/Downloads/tennis_atten/qrs"
             generated.save(folder + r'/' + f"{name}.png", )
             return
-
-            # img = Image.open(f"{name}.png") ^
-            # img.show() ^
-
         else:
             print("Unacceptable name. Name already in system.")
 
@@ -93,15 +81,46 @@ def check_in():
 
 
 def check_attendance():
-    choice = input("Select: Single day or entire? (D/E) ")
-    if choice.lower() == 'd':
-        with open('record.json') as f:
-            record = json.load(f)
-            print(record[datetime.datetime.now().strftime('%x')])
-    elif choice.lower() == 'e':
-        with open('record.json') as f:
-            record = json.load(f)
-            print(record)
+    inpver= True
+    while inpver:
+        choice = input("Select: Single day or entire? (D/E) ")
+        if choice.lower() == 'd':
+            with open('record.json') as f:
+                record = json.load(f)
+                print(record[datetime.datetime.now().strftime('%x')])
+        elif choice.lower() == 'e':
+            tableform = input("Select: Print to console or to table? (C/T) ")
+            if tableform.lower() == 't':
+                with open('record.json') as f:
+                    record = json.load(f)
+                item_count_max = 0
+                for item in record.values():
+                    if len(item) > item_count_max:
+                        item_count_max = len(item)
+                for item in record.values():
+                    for i in range(item_count_max - len(item)):
+                        item.append('')
+                df = pd.DataFrame.from_dict(record)
+                fig, ax = plt.subplots()
+                # Table creation and formatting
+                fig.patch.set_visible(False)
+                ax.axis('off')
+                ax.axis('tight')
+                ax.table(cellText=df.values, colLabels=df.columns, loc='center')
+                fig.tight_layout()
+                plt.title('Attendance Sheet')
+                figmanager = plt.get_current_fig_manager()
+                figmanager.set_window_title('Attendance Sheet')
+                plt.show()
+                inpver = False
+            elif tableform.lower() == 'c':
+                with open('record.json') as f:
+                    record = json.load(f)
+                print(record)
+                inpver = False
+            else:
+                print("Invalid Selection. Please select D/E...")
+                input('Press enter to continue...')
 
 
 def search_attendance():
@@ -127,6 +146,9 @@ def search_attendance():
             print(f"{name} was marked present a total of {count_present} times.")
             print("Days present:")
             print(days)
+    else:
+        print("Invalid Selection. Please select D/E...")
+        input('Press enter to continue...')
 
 
 def email():
@@ -140,9 +162,9 @@ def email():
         for i in range(item_count_max - len(item)):
             item.append('')
     df = pd.DataFrame.from_dict(record)
-    df.to_csv(r'attendance.csv', index = False, header=True)
-    email_sender = SENDER
-    email_password = EMAILPASS
+    df.to_csv(r'attendance.csv', index=False, header=True)
+    email_sender = 'qrinbotv1.0@gmail.com'
+    email_password = 'ghcctbyrmrvayqgq'
     verify = True
     while verify:
         email_receiver = input("Enter an email to send attendance: \n")
@@ -184,7 +206,7 @@ def main():
 
     def clearconsole():
         command = 'clear'
-        if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
+        if os.name in ('nt', 'dos'):  # CLS used for Windows
             command = 'cls'
         os.system(command)
 
@@ -213,7 +235,7 @@ def main():
         6: 'Exit',
     }
     print("Loading dependencies...")
-    files = os.listdir( )
+    files = os.listdir()
     for file in files:
         print(file)
         time.sleep(0.2)
@@ -235,8 +257,8 @@ def main():
         clearconsole()
         print("*QRin version 1.0 -- Made by Luc Cohen*")
         print("------ Menu ------")
-        for key in menu_options.keys():
-            print(key, '--', menu_options[key])
+        for key, item in menu_options.items():
+            print(key, '--', item)
         option = ''
         try:
             option = int(input('Enter your choice: '))
