@@ -9,7 +9,7 @@ Designed for club use at Western School of Technology and Environmental Science.
  - Initialize a **local** powershell shell
 
  - Download project, install required modules: cv2, qrcode, smtplib, Colorama, datetime, json, PIL using the command below:
-     - ```$ python -m pip install qrcode opencv-contrib-python pillow pandas colorama smtplib json matplotlib```
+     - ```$ python -m pip install qrcode opencv-contrib-python pillow pandas colorama json matplotlib```
  
  - Run the following command:
      - ```py ./qrattendance.py```
