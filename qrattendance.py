@@ -36,18 +36,21 @@ import matplotlib.pyplot as plt
 def scan_in():
     vid_cap = cv2.VideoCapture(0)
     detector = cv2.QRCodeDetector()
+    qrseen = False
     while True:
         _, img = vid_cap.read()
         data, bbox, _ = detector.detectAndDecode(img)
         if data:
             a = data
+            qrseen = True
             break
         cv2.imshow("Attendance Scanner", img)
         if cv2.waitKey(1) == ord("q"):
             break
     vid_cap.release()
     cv2.destroyAllWindows()
-    return a
+    if qrseen:
+        return a
 
 
 def add_name(name):
@@ -87,7 +90,10 @@ def check_attendance():
         if choice.lower() == 'd':
             with open('record.json') as f:
                 record = json.load(f)
-                print(record[datetime.datetime.now().strftime('%x')])
+                if datetime.datetime.now().strftime('%x') in record:
+                    print(record[datetime.datetime.now().strftime('%x')])
+                else:
+                    print("No entries found for the current day.")
         elif choice.lower() == 'e':
             tableform = input("Select: Print to console or to table? (C/T) ")
             if tableform.lower() == 't':
@@ -172,7 +178,7 @@ def email():
         if ensure.lower() == 'y':
             verify = False
     subject = 'QRin Automated Attendance Delivery'
-    # body = f'''
+    # body = f'''  <-- used for text body in email for previous method of emailing. Non-functional.
     # Attached below is a complete copy of the QRin attendance record.
     #
     # Sent from QRin automated attendance
