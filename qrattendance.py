@@ -295,8 +295,8 @@ def main():
             input("Press enter to continue...")
         elif option == 5:
             from getpass import getpass
-            user = 'LMC060'
-            password = 'Vwup*238'
+            user = '' # INSERT OWN USER
+            password = '' # INSERT OWN PASS
             passtrue = True
             failcount = 0
             while passtrue:
